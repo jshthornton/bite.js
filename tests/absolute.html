@@ -1,0 +1,33 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Absolute Test</title>
+
+	<style>
+		.fixed-height {
+			height: 3000px;
+		}
+	</style>
+</head>
+<body>
+	<div class="fixed-height"></div>
+
+	<script src="scripts/jquery.js"></script>
+	<script src="scripts/lodash.js"></script>
+	<script src="../src/bite.js"></script>
+
+	<script>
+		(function() {
+			bite.start();
+
+			bite.register({
+				type: 'absolute',
+				point: {
+					y: 500
+				}
+			}, function() {console.log('test')});
+		}());
+	</script>
+</body>
+</html>

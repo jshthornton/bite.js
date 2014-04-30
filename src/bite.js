@@ -8,7 +8,12 @@
 				_idCount: 0,
 
 				register: function(opts, callback) {
-					opts = $.extend(true, {
+/*					if(opts.type === 'absolute') {
+
+					}*/
+
+
+/*					opts = $.extend(true, {
 						reference: null,
 						offset: 0
 					}, opts);
@@ -18,14 +23,18 @@
 						ref += opts.reference;
 					} else {
 						ref += opts.reference.offset().top;
-					}
+					}*/
+
+					if(typeof callback !== 'function') return false;
 
 					var id = this._idCount++;
 
 					this._hash.push({
 						id: id,
-						point: ref,
-						callback: callback
+						type: opts.type,
+						point: opts.point,
+						callback: callback,
+						once: opts.once
 					});
 
 					return id; 
@@ -47,7 +56,7 @@
 
 				start: function() {
 					$win.on('scroll resize', 
-						$.proxy(
+						_.bind(
 							_.throttle(
 								this._onWindowAdjust, 
 								100
@@ -68,16 +77,30 @@
 
 				check: function() {
 					var _this = this,
-						scrollTop = $win.scrollTop();
+						scrollTop = $win.scrollTop(),
+						scrollLeft = $win.scrollLeft();
 
-					$.each(this._hash, function(index, value) {
-						if(scrollTop >= value.point) {
-							if(typeof value.callback === 'function') {
+					_.each(this._hash, function(value, index) {
+						var point = value.point;
+
+						if(typeof point.x === 'number' && typeof point.y === 'number') {
+							if(scrollLeft >= point.x && scrollTop >= point.y) {
 								value.callback();
 							}
+						} else if(typeof point.x === 'number') {
+							if(scrollLeft >= point.x) {
+								value.callback();
+							}
+						} else if(typeof point.y === 'number') {
+							if(scrollTop >= point.y) {
+								value.callback();
+							}
+						}
 
+						if(value.once) {
 							_this._unregisterByIndex(index);
 						}
+
 					});
 				}
 			};
