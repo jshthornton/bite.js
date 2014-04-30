@@ -7,6 +7,7 @@
 	<style>
 		.fixed-height {
 			height: 3000px;
+			width: 3000px;
 		}
 	</style>
 </head>
@@ -26,7 +27,22 @@
 				point: {
 					y: 500
 				}
-			}, function() {console.log('test')});
+			}, function() {console.log('Y')});
+
+			bite.register({
+				type: 'absolute',
+				point: {
+					x: 500
+				}
+			}, function() {console.log('X')});
+
+			bite.register({
+				type: 'absolute',
+				point: {
+					x: 700,
+					y: 700
+				}
+			}, function() {console.log('X, Y')});
 		}());
 	</script>
 </body>
