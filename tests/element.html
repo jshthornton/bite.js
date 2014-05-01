@@ -1,0 +1,59 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Element Test</title>
+
+	<style>
+		.fixed-height {
+			height: 3000px;
+			width: 3000px;
+		}
+
+		.test {
+			height: 400px;
+			background-color: red;
+		}
+	</style>
+</head>
+<body>
+	<div class="fixed-height"></div>
+	<div class="test"></div>
+	<div class="fixed-height"></div>
+
+	<script src="scripts/jquery.js"></script>
+	<script src="scripts/lodash.js"></script>
+	<script src="../src/bite.js"></script>
+
+	<script>
+		(function() {
+			bite.start();
+
+			bite.register({
+				type: 'element',
+				$el: $('.test'),
+				point: {
+					y: true
+				}
+			}, function() {console.log('Y')});
+
+			bite.register({
+				type: 'element',
+				$el: $('.test'),
+				point: {
+					x: true
+				}
+			}, function() {console.log('X')});
+
+			bite.register({
+				type: 'element',
+				$el: $('.test'),
+				point: {
+					x: true,
+					y: true
+				}
+			}, function() {console.log('X, Y')});
+		}());
+	</script>
+</body>
+</html>

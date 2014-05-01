@@ -1,0 +1,160 @@
+<!doctype html>
+<html lang="en">
+<head>
+	<meta charset="UTF-8">
+	<title>Absolute Test</title>
+
+	<style>
+		body {
+			margin: 0;
+			width: 3000px;
+			height: 3000px;
+		}
+
+		#ruler {
+			position: fixed;
+			top: 0;
+			bottom: 0;
+			left: 0;
+			right: 0;
+		}
+
+		#ruler .quad {
+			position: fixed;
+			width: 50%;
+			height: 50%;
+			opacity: 0.1;
+		}
+
+		#ruler .quad1 {
+			top: 0;
+			left: 0;
+			background-color: red;
+		}
+
+		#ruler .quad2 {
+			top: 0;
+			right: 0;
+			background-color: yellow;
+		}
+
+		#ruler .quad3 {
+			bottom: 0;
+			left: 0;
+			background-color: yellow;
+		}
+
+		#ruler .quad4 {
+			bottom: 0;
+			right: 0;
+			background-color: red;
+		}
+
+		#tester1 {
+			position: absolute;
+			top: 500px;
+			left: 0;
+			right: 0;
+			height: 20px;
+			background-color: black;
+		}
+
+		#tester2 {
+			position: absolute;
+			top: 0;
+			bottom: 0;
+			left: 500px;
+			right: 0;
+			width: 20px;
+			background-color: black;
+		}
+
+		#tester3 {
+			position: absolute;
+			top: 700px;
+			left: 700px;
+			width: 20px;
+			height: 20px;
+			background-color: black;
+		}
+	</style>
+</head>
+<body>
+	<div id="ruler">
+		<div class="quad quad1"></div>
+		<div class="quad quad2"></div>
+		<div class="quad quad3"></div>
+		<div class="quad quad4"></div>
+	</div>
+
+	<div id="tester1"></div>
+	<div id="tester2"></div>
+	<div id="tester3"></div>
+
+	<script src="scripts/jquery.js"></script>
+	<script src="scripts/lodash.js"></script>
+	<script src="../src/bite.js"></script>
+
+	<script>
+		(function() {
+			bite.start();
+
+			bite.register({
+				type: 'absolute',
+				point: {
+					y: 500
+				}
+			}, function() {console.log('Y 0,0')});
+
+			bite.register({
+				type: 'absolute',
+				point: {
+					x: 500
+				}
+			}, function() {console.log('X 0,0')});
+
+			bite.register({
+				type: 'absolute',
+				point: {
+					x: 700,
+					y: 700
+				}
+			}, function() {console.log('X, Y 0,0')});
+
+			bite.register({
+				type: 'absolute',
+				point: {
+					y: 500
+				},
+				origin: {
+					y: 50,
+					unitY: '%'
+				}
+			}, function() {console.log('Y 0,50%')});
+
+			bite.register({
+				type: 'absolute',
+				point: {
+					y: 500
+				},
+				origin: {
+					y: 50,
+					unitY: 'px'
+				}
+			}, function() {console.log('Y 0,50px')});
+
+			bite.register({
+				type: 'absolute',
+				point: {
+					y: 500
+				},
+				origin: {
+					y: 50,
+					unitY: '%'
+				},
+				toggle: true
+			}, function() {console.log('Y 0,50% toggle')});
+		}());
+	</script>
+</body>
+</html>
