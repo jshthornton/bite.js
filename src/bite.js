@@ -56,6 +56,10 @@
 					this._unregisterByIndex(index);
 				},
 
+				unregisterAll: function() {
+					this._hash.length = 0;
+				},
+
 				_unregisterByIndex: function(index) {
 					this._hash.splice(index, 1);
 				},
