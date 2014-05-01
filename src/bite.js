@@ -11,8 +11,9 @@
 				_winWidth: 0,
 				_winHeight: 0,
 
-				register: function(opts, callback) {
-					if(typeof callback !== 'function') return false;
+				register: function(opts, inCallback, outCallback) {
+					if(typeof inCallback !== 'function') return false;
+					if(typeof outCallback !== 'function') outCallback = $.noop;
 
 					opts = $.extend(true, {
 						point: {
@@ -36,7 +37,8 @@
 						type: opts.type,
 						$el: opts.$el,
 						point: opts.point,
-						callback: callback,
+						inCallback: inCallback,
+						outCallback: outCallback,
 						once: opts.once,
 						origin: opts.origin,
 						toggle: opts.toggle,
@@ -167,7 +169,7 @@
 
 						if(result) {
 							if(value.active) {
-								value.callback();
+								value.inCallback();
 
 								if(value.once) {
 									this._unregisterByIndex(index);
@@ -178,6 +180,10 @@
 								value.active = false;
 							}
 						} else {
+							if(value.active) {
+								value.outCallback();
+							}
+
 							if(value.toggle) {
 								value.active = true;
 							}

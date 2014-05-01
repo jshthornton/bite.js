@@ -104,9 +104,13 @@
 				point: {
 					y: 500
 				}
-			}, function() {console.log('Y 0,0')});
+			}, function() {
+				console.log('Y 0,0')
+			}, function() {
+				console.log('onLeave')
+			});
 
-			bite.register({
+			/*bite.register({
 				type: 'absolute',
 				point: {
 					x: 500
@@ -141,7 +145,7 @@
 					y: 50,
 					unitY: 'px'
 				}
-			}, function() {console.log('Y 0,50px')});
+			}, function() {console.log('Y 0,50px')});*/
 
 			bite.register({
 				type: 'absolute',
@@ -153,7 +157,11 @@
 					unitY: '%'
 				},
 				toggle: true
-			}, function() {console.log('Y 0,50% toggle')});
+			}, function() {
+				console.log('Y 0,50% onEnter')
+			}, function() {
+				console.log('onLeave')
+			});
 		}());
 	</script>
 </body>
