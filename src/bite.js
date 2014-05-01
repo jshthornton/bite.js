@@ -25,7 +25,8 @@
 							y: 0,
 							unitX: 'px',
 							unitY: 'px'
-						}
+						},
+						toggle: false
 					}, opts);
 
 					var id = this._idCount++;
@@ -37,7 +38,9 @@
 						point: opts.point,
 						callback: callback,
 						once: opts.once,
-						origin: opts.origin
+						origin: opts.origin,
+						toggle: opts.toggle,
+						active: true
 					});
 
 					return id; 
@@ -146,10 +149,6 @@
 								origin: value.origin
 							});
 
-							if(result) {
-								value.callback();
-							}
-							
 						} else if(value.type === 'element') {
 							var offset = value.$el.offset();
 
@@ -160,9 +159,19 @@
 								y: offset.top,
 								origin: value.origin
 							});
+						}
 
-							if(result) {
+						if(result) {
+							if(value.active) {
 								value.callback();
+							}
+
+							if(value.toggle) {
+								value.active = false;
+							}
+						} else {
+							if(value.toggle) {
+								value.active = true;
 							}
 						}
 
