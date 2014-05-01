@@ -6,35 +6,38 @@
 			bite = {
 				_hash: [],
 				_idCount: 0,
+				_scrollTop: 0,
+				_scrollLeft: 0,
+				_winWidth: 0,
+				_winHeight: 0,
 
 				register: function(opts, callback) {
-/*					if(opts.type === 'absolute') {
-
-					}*/
-
-
-/*					opts = $.extend(true, {
-						reference: null,
-						offset: 0
-					}, opts);
-
-					var ref = opts.offset;
-					if(typeof opts.reference === 'number') {
-						ref += opts.reference;
-					} else {
-						ref += opts.reference.offset().top;
-					}*/
-
 					if(typeof callback !== 'function') return false;
+
+					opts = $.extend(true, {
+						point: {
+							x: false,
+							y: false
+						},
+						once: false,
+						origin: {
+							x: 0,
+							y: 0,
+							unitX: 'px',
+							unitY: 'px'
+						}
+					}, opts);
 
 					var id = this._idCount++;
 
 					this._hash.push({
 						id: id,
 						type: opts.type,
+						$el: opts.$el,
 						point: opts.point,
 						callback: callback,
-						once: opts.once
+						once: opts.once,
+						origin: opts.origin
 					});
 
 					return id; 
@@ -55,7 +58,7 @@
 				},
 
 				start: function() {
-					$win.on('scroll resize', 
+					$win.on('scroll.bite resize.bite', 
 						_.bind(
 							_.throttle(
 								this._onWindowAdjust, 
@@ -64,44 +67,110 @@
 							this
 						)
 					);
+
+					this._updateDimensions('scroll');
+					this._updateDimensions('resize');
+
 					this.check();
 				},
 
 				stop: function() {
-
+					$win.off('scroll.bite resize.bite');
 				},
 
-				_onWindowAdjust: function() {
+				_onWindowAdjust: function(e) {
+					this._updateDimensions(e.type);
+
 					this.check();
 				},
 
+				_updateDimensions: function(type) {
+					if(type === 'scroll') {
+						this._scrollLeft = $win.scrollLeft();
+						this._scrollTop = $win.scrollTop();
+					} else if(type === 'resize') {
+						this._winWidth = $win.width();
+						this._winHeight = $win.height();
+					}
+				},
+
+				_check: function(data) {
+					var thresholdX = this._scrollLeft,
+						thresholdY = this._scrollTop,
+						originX,
+						originY;
+
+					if(data.origin.unitX === '%') {
+						originX = this._winWidth * (data.origin.x / 100);
+					} else {
+						originX = data.origin.x;
+					}
+
+					if(data.origin.unitY === '%') {
+						originY = this._winHeight * (data.origin.y / 100);
+					} else {
+						originY = data.origin.y;
+					}
+
+					thresholdX += originX;
+					thresholdY += originY;
+
+					if(data.doX && data.doY) {
+						if(thresholdX >= data.x && thresholdY >= data.y) {
+							return true;
+						}
+					} else if(data.doX) {
+						if(thresholdX >= data.x) {
+							return true;
+						}
+					} else if(data.doY) {
+						if(thresholdY >= data.y) {
+							return true;
+						}
+					}
+
+					return false;
+				},
+
 				check: function() {
-					var _this = this,
-						scrollTop = $win.scrollTop(),
-						scrollLeft = $win.scrollLeft();
-
 					_.each(this._hash, function(value, index) {
-						var point = value.point;
+						var point = value.point,
+							result;
 
-						if(typeof point.x === 'number' && typeof point.y === 'number') {
-							if(scrollLeft >= point.x && scrollTop >= point.y) {
+						if(value.type === 'absolute') {
+							result = this._check({
+								doX: typeof point.x === 'number',
+								doY: typeof point.y === 'number',
+								x: point.x,
+								y: point.y,
+								origin: value.origin
+							});
+
+							if(result) {
 								value.callback();
 							}
-						} else if(typeof point.x === 'number') {
-							if(scrollLeft >= point.x) {
-								value.callback();
-							}
-						} else if(typeof point.y === 'number') {
-							if(scrollTop >= point.y) {
+							
+						} else if(value.type === 'element') {
+							var offset = value.$el.offset();
+
+							result = this._check({
+								doX: point.x,
+								doY: point.y,
+								x: offset.left,
+								y: offset.top,
+								origin: value.origin
+							});
+
+							if(result) {
 								value.callback();
 							}
 						}
 
 						if(value.once) {
-							_this._unregisterByIndex(index);
+							this._unregisterByIndex(index);
 						}
 
-					});
+					}, this);
 				}
 			};
 
