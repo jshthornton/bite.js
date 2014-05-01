@@ -168,6 +168,10 @@
 						if(result) {
 							if(value.active) {
 								value.callback();
+
+								if(value.once) {
+									this._unregisterByIndex(index);
+								}
 							}
 
 							if(value.toggle) {
@@ -177,10 +181,6 @@
 							if(value.toggle) {
 								value.active = true;
 							}
-						}
-
-						if(value.once) {
-							this._unregisterByIndex(index);
 						}
 
 					}, this);
