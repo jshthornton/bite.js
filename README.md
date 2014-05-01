@@ -5,6 +5,9 @@ bite.js is a utility script which helps javascript developer who need to perform
 
 bite.js currently offers two ways in which a threshold can be set, either as an absolute coordinate, or as an element's coordinates.
 
+## Demo
+[http://codepen.io/Jshthornton/pen/jAzuG](http://codepen.io/Jshthornton/pen/jAzuG)
+
 ## Requirements
 * jQuery
 * underscore or lodash
