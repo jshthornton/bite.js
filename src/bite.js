@@ -142,6 +142,8 @@
 				},
 
 				check: function() {
+					var toUnregister = [];
+
 					_.each(this._hash, function(value, index) {
 						var point = value.point,
 							result;
@@ -172,7 +174,7 @@
 								value.inCallback();
 
 								if(value.once) {
-									this._unregisterByIndex(index);
+									toUnregister.push(value.id);
 								}
 							}
 
@@ -189,6 +191,10 @@
 							}
 						}
 
+					}, this);
+
+					_.each(toUnregister, function(id) {
+						this.unregister(id);
 					}, this);
 				}
 			};
