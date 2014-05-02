@@ -133,3 +133,9 @@ var id = bite.register({
 
 bite.unregister(id);
 ```
+### Callbacks
+For the bite parameters it accepts an in callback and an out callback. The in callback is invoked when the user has hits the threshold. 
+Whereas the out callback is invoked when the user is not in the threshold.
+
+When using `toggle = true` the out and in callbacks are only called once upon state change.
+When using `toggle = false` the out and in callbacks are constantly called.
