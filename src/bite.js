@@ -2,13 +2,89 @@
 	'use strict';
 
 	function _do($, _) {
-		var $win = $(window),
-			bite = {
+		var $win = $(window);
+		/*
+		A utility script which helps developers who need to perform a function once the page scroll hits a certain point.
+
+		@class bite
+		@static
+		@requires jQuery, underscore
+		*/
+		var bite = {
+				/*
+				A hash to hold all of the registered items.
+				Formatted as:
+					[{
+						id: Number,
+						type: String,
+						$el: jQuery,
+						point: {
+							x: Bool|Number,
+							y: Bool|Number
+						},
+						inCallback: Function,
+						outCallback: Function,
+						once: Boolm
+						origin: {
+							x: Number,
+							y: Number,
+							unitX: String,
+							unitY: String
+						},
+						toggle: Bool,
+						active: Bool
+					}]
+				
+				@property _hash
+				@type Array
+				@default []
+				@protected
+				*/
 				_hash: [],
+				/*
+				Counter for hash ids.
+
+				@property _idCount
+				@type Integer
+				@default 0
+				@protected
+				*/
 				_idCount: 0,
+				/*
+				Window's scrolltop.
+
+				@property _scrollTop
+				@type Integer
+				@default 0
+				@protected
+				*/
 				_scrollTop: 0,
+				/*
+				Window's scrollleft.
+
+				@property _scrollLeft
+				@type Integer
+				@default 0
+				@protected
+				*/
 				_scrollLeft: 0,
+				/*
+				Window's width.
+
+				@property _winWidth
+				@type Integer
+				@default 0
+				@protected
+				*/
 				_winWidth: 0,
+				/*
+				Window's height.
+
+				@property _winHeight
+				@type Integer
+				@default 0
+				@protected
+				*/
 				_winHeight: 0,
 
 				register: function(opts, inCallback, outCallback) {
