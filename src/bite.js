@@ -182,7 +182,7 @@
 								value.active = false;
 							}
 						} else {
-							if(value.active) {
+							if((value.toggle && !value.active) || (!value.toggle)) {
 								value.outCallback();
 							}
 
