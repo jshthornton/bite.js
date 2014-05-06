@@ -8,6 +8,8 @@ bite.js currently offers two ways in which a threshold can be set, either as an 
 ## Demo
 [http://codepen.io/Jshthornton/pen/jAzuG](http://codepen.io/Jshthornton/pen/jAzuG)
 
+**Note:** See the console for output.
+
 ## Requirements
 * jQuery
 * underscore or lodash
