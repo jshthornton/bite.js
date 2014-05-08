@@ -86,12 +86,43 @@
 				@protected
 				*/
 				_winHeight: 0,
+				/*
+				Registers a new item to watch.
 
+				@method register
+				@param {Object} opts Options to alter how the watching operates.
+				@param {String} opts.type The type of watching. Either `absolute` or `element`.
+				`absolute` uses a raw X,Y coordinate. Whereas `element` uses an element's X,Y coordindates.
+				@param {Bool|Number} opts.point.x
+				@param {jQuery} [opts.$el] Which element to watch. Required if `opts.type = 'element'`.
+				@param {Bool|Number} [opts.point.x] 
+				When using `opts.type = 'absolute'` setting this param to any number will set the X threshold to the number.
+				Whereas using `opts.type = 'element'` setting this param should be a Bool. `false` will not include the X coordinate. `true` will use the element's left offset.
+				X and Y operate in an AND capacity. Therefore `inCallback` will not invoke unless both meet the threshold.
+				@param {Bool|Number} [opts.point.y] 
+				See `opts.point.x`. Just apply Y and top offset.
+				@param {Bool} [opts.once] If `true` then the item unregisters once the threshold has been met once. `false` will cause the item to be constantly rechecked.
+				@param {Object} [opts.origin] Informs bite where the threshold should be calculated from. Not on the element but the window.
+				@param {Number} [opts.origin.x] 
+				If `opts.origin.unitX = 'px'` then the X coordindate of the window which will trigger the threshold. 0 = Left.
+				However, `opts.origin.unitX = '%'` will inform bite to calculate window's dimensions and use a percentage for comparison. 
+				This method is useful for items coming onto the screen (100) or half way on the screen (50).
+				@param {Number} [opts.origin.y] If `opts.origin.unitY = 'px'` then the Y coordindate of the window which will trigger the threshold. 0 = Top.
+				However, `opts.origin.unitY = '%'` will inform bite to calculate window's dimensions and use a percentage for comparison. 
+				This method is useful for items coming onto the screen (100) or half way on the screen (50).
+				@param {String} [opts.origin.unitX] `px` or `%`, offsets the threshold calculation point. 
+				`px` will use literal pixel distance, whereas `%` will use the window's dimensions as a reference.
+				@param {String} [opts.origin.unitY] `px` or `%`, offsets the threshold calculation point. 
+				`px` will use literal pixel distance, whereas `%` will use the window's dimensions as a reference.
+
+				@return {Integer} Unique id to use for unregistering.
+				*/
 				register: function(opts, inCallback, outCallback) {
 					if(typeof inCallback !== 'function') return false;
 					if(typeof outCallback !== 'function') outCallback = $.noop;
 
 					opts = $.extend(true, {
+						type: 'absolute',
 						point: {
 							x: false,
 							y: false
