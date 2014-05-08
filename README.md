@@ -1,7 +1,7 @@
 bite.js
 ==========
 
-bite.js is a utility script which helps javascript developer who need to perform a function once the page scroll hits a certain point.
+bite.js is a utility script which helps javascript developers who need to perform a function once the page scroll hits a certain point.
 
 bite.js currently offers two ways in which a threshold can be set, either as an absolute coordinate, or as an element's coordinates.
 
